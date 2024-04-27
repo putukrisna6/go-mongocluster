@@ -14,7 +14,7 @@ import (
 
 func main() {
 	// create a database connection
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://router01:27017"))
+	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://mongodb:27017"))
 	if err != nil {
 		log.Fatal(err)
 	}
