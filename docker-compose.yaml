@@ -16,7 +16,7 @@ services:
 
 ## Router
   router01:
-    image: mongo:6.0.1
+    image: mongo:7.0
     container_name: router-01
     command: mongos --port 27017 --configdb rs-config-server/configsvr01:27017 --bind_ip_all
     ports:
@@ -28,7 +28,7 @@ services:
 
 ## Config Servers
   configsvr01:
-    image: mongo:6.0.1
+    image: mongo:7.0
     container_name: mongo-config-01 
     command: mongod --port 27017 --configsvr --replSet rs-config-server
     volumes:
@@ -44,7 +44,7 @@ services:
 ## Shards
   ## Shards 01
   shard01-a:
-    image: mongo:6.0.1
+    image: mongo:7.0
     container_name: shard-01-node-a
     command: mongod --port 27017 --shardsvr --replSet rs-shard-01
     volumes:
@@ -57,7 +57,7 @@ services:
     networks:
       - backend
   shard01-b:
-    image: mongo:6.0.1
+    image: mongo:7.0
     container_name: shard-01-node-b
     command: mongod --port 27017 --shardsvr --replSet rs-shard-01
     volumes:
@@ -67,7 +67,7 @@ services:
     networks:
       - backend
   shard01-c:
-    image: mongo:6.0.1
+    image: mongo:7.0
     container_name: shard-01-node-c
     command: mongod --port 27017 --shardsvr --replSet rs-shard-01
     volumes:
@@ -79,7 +79,7 @@ services:
 
   ## Shards 02
   shard02-a:
-    image: mongo:6.0.1
+    image: mongo:7.0
     container_name: shard-02-node-a
     command: mongod --port 27017 --shardsvr --replSet rs-shard-02
     volumes:
@@ -92,7 +92,7 @@ services:
     networks:
       - backend
   shard02-b:
-    image: mongo:6.0.1
+    image: mongo:7.0
     container_name: shard-02-node-b
     command: mongod --port 27017 --shardsvr --replSet rs-shard-02
     volumes:
@@ -102,7 +102,7 @@ services:
     networks:
       - backend
   shard02-c:
-    image: mongo:6.0.1
+    image: mongo:7.0
     container_name: shard-02-node-c
     command: mongod --port 27017 --shardsvr --replSet rs-shard-02
     volumes:
