@@ -15,7 +15,7 @@ services:
       - backend
 
   mongo1:
-    image: mongo:6.0.1
+    image: mongo:7.0
     command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
     ports:
       - 27017:27017
@@ -33,7 +33,7 @@ services:
       - backend
       
   mongo2:
-    image: mongo:6.0.1
+    image: mongo:7.0
     command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27018"]
     ports:
       - 27018:27018
@@ -44,7 +44,7 @@ services:
       - backend
       
   mongo3:
-    image: mongo:6.0.1
+    image: mongo:7.0
     command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27019"]
     ports:
       - 27019:27019
