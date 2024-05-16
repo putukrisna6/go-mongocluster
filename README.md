@@ -1,6 +1,13 @@
-This is CRUD operations on MongoDB written in Golang. You can create, read, update, and delete users from the MongoDB instance using http requests.
+# A Go API with different MongoDB configurations
 
-Credit to: github.com:parsaakbari1209
+## Acknowledgements
+- The server is based on https://github.com/parsrc/go-mongo-crud-rest-api
+- The sharded replica configuration is based on https://github.com/minhhungit/mongodb-cluster-docker-compose/tree/master/minimize
+
+## Features
+- CRUD operations written in Go
+- 4 different MongoDB configuration: replica, sharded, sharded replica, and standalone
+- Docker deployment 
 
 ## Endpoints:
 ```sh
@@ -10,75 +17,27 @@ PUT    /users/:email
 DELETE /users/:email
 ```
 
-### Get User
-This endpoint retrieves a user given the email.  
-Send a `GET` request to `/users/:email`:
-```sh
-curl -X GET 'http://127.0.0.1:8080/users/bob@gmail.com'
+## Setup
+Only for `master` and `sharded`
+
 ```
-Response:
-```sh
-{
-  "user": {
-    "id": "<user_id>",
-    "name": "Bob",
-    "email": "bob@gmail.com",
-    "password": "ilovealice"
-  }
-}
-```
-### Create User
-This endpoint inserts a document in the `users` collection of the `users` database.  
-Send a `POST` request to `/users`:
-```sh
-curl -X POST 'http://127.0.0.1:8080/users' -H "Content-Type: application/json" -d '{"name": "Bob", "email": "bob@gmail.com", "password": "ilovealice"}'
-```
-Response:  
-```sh
-{
-  "user": {
-    "id": "<user_id>",
-    "name": "Bob",
-    "email": "bob@gmail.com",
-    "password": "ilovealice"
-  }
-}
-```
-### Update User
-This endpoint updates the provided fields within the specified document filtered by email.  
-Send a `PUT` request to `/users/:email`:
-```sh
-curl -X PUT 'http://127.0.0.1:8080/users/bob@gmail.com' -H "Content-Type: application/json" -d '{"password": "loveyoualice"}'
-```
-Response:
-```sh
-{
-  "user": {
-    "id": "<user_id>",
-    "name": "Bob",
-    "email": "bob@gmail.com",
-    "password": "loveyoualice"
-  }
-}
+sudo docker compose exec configsvr01 sh -c "mongosh < /scripts/init-configserver.js"
+
+sudo docker compose exec shard01-a sh -c "mongosh < /scripts/init-shard01.js"
+sudo docker compose exec shard02-a sh -c "mongosh < /scripts/init-shard02.js"
+
+sudo docker compose exec router01 sh -c "mongosh < /scripts/init-router.js"
 ```
 
-### Delete User
-This endpoint deletes the user from database given the email.  
-Send a `DELETE` request to `/users/:email`:
-```sh
-curl -X DELETE 'http://127.0.0.1:8080/users/bob@gmail.com'
+Afterward, exec to the router to enable sharding on a collection.
+
 ```
-Response:
-```sh
-{}
+sudo docker compose exec router01 mongosh --port 27017
 ```
 
-### Errors
-All of the endpoints return an error in json format with a proper http status code, if something goes wrong:
-```sh
-{
-  "error": "user not found"
-}
+Run the following in the mongosh console
+
 ```
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
+sh.enableSharding("MyDatabase")
+db.adminCommand( { shardCollection: "MyDatabase.users", key: { _id: "hashed" } } )
+```
